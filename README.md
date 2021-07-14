@@ -1,1 +1,1 @@
-# Density-Estimation
+# Dimension-Estimation
