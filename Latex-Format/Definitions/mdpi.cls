@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% %%	MDPI class for LaTeX files	 14.6.2020
+%% %%	MDPI class for LaTeX files	 9.9.2019
 %% %%	For any information please send an e-mail to:
 %% %%		latex@mdpi.com
 %% %%
@@ -20,7 +20,7 @@
 
 %% IDENTIFICATION
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{Definitions/mdpi}[06/14/2020 MDPI paper class]
+\ProvidesClass{Definitions/mdpi}[09/09/2019 MDPI paper class]
 
 %%%% Copyright and citebox
  \AtEndDocument{\par \cright}
@@ -44,10 +44,10 @@
 \RequirePackage{booktabs} % For \toprule etc. in tables
 \RequirePackage[largestsep]{titlesec}
 \RequirePackage{etoolbox} % For \AtBeginDocument etc.
-\RequirePackage{tabto} % To use tab for alignment on first page
+%\RequirePackage{tabto} % To use tab for alignment on first page
 \RequirePackage[table]{xcolor} % To provide color for soul (for english editing) and provide coloring for tables (author request)
 \RequirePackage{soul} % To highlight text
-\newcommand{\highlighting}[1]{\colorbox{yellow}{#1}}
+\newcommand{\highlight}[1]{\colorbox{yellow}{#1}}
 \RequirePackage{multirow}
 \RequirePackage{microtype} % For command \textls[]{}
 \RequirePackage{tikz} % For \foreach used for Orcid icon
@@ -219,8 +219,6 @@
 \OR \equal{\@journal}{genealogy}
 \OR \equal{\@journal}{humanities}
 \OR \equal{\@journal}{ijfs}
-\OR \equal{\@journal}{jintelligence}
-\OR \equal{\@journal}{journalmedia}
 \OR \equal{\@journal}{jrfm}
 \OR \equal{\@journal}{languages}
 \OR \equal{\@journal}{laws}
