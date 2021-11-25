@@ -11,7 +11,7 @@ def main():
     df = pd.read_csv('frames.csv')
 
     # load database
-    database = 'spect.mat'
+    database = 'telescope.mat'
     data = loadmat('./Databases/' + database)
     X = data['X']
     y = data['Y']
@@ -23,19 +23,22 @@ def main():
     knn = KNN(3)
 
     # without transformation
-    accuracy_original = calculate_accuracy(X, y, knn)
+    accuracy_original = calculate_accuracy(X, y, knn, database[:-4]+'O')
 
     # initialize pca
     pca = PCA()
 
     # after kaiser rule
-    accuracy_kaiser = calculate_accuracy(pca.transformation(X, df[df['Databases'] == database]['PCA-K'].item()), y, knn)
+    accuracy_kaiser = calculate_accuracy(pca.transformation(X, df[df['Databases'] == database]['PCA-K'].item()), y,
+                                         knn, database[:-4]+'K')
 
     # after broken stick
-    accuracy_bs = calculate_accuracy(pca.transformation(X, df[df['Databases'] == database]['PCA-BS'].item()), y, knn)
+    accuracy_bs = calculate_accuracy(pca.transformation(X, df[df['Databases'] == database]['PCA-BS'].item()), y,
+                                     knn, database[:-4]+'BS')
 
     # after conditional number
-    accuracy_cn = calculate_accuracy(pca.transformation(X, df[df['Databases'] == database]['PCA-CN'].item()), y, knn)
+    accuracy_cn = calculate_accuracy(pca.transformation(X, df[df['Databases'] == database]['PCA-CN'].item()), y, knn,
+                                     database[:-4]+'CN')
 
     print(database, round(accuracy_original, 2), round(accuracy_kaiser, 2), round(accuracy_bs, 2),
           round(accuracy_cn, 2))

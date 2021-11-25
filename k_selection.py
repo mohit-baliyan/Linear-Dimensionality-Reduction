@@ -27,7 +27,7 @@ def main():
     for i in range(1, 30):
         knn = KNN(i)
         k.append(i)
-        accuracy.append(calculate_accuracy(X_transform, y, knn))
+        accuracy.append(calculate_accuracy(X_transform, y, knn, 'MuskCN'))
 
     # create dictionary, then convert into pandas dataframe to further save as a csv file
     dictionary = {'K': k, 'Accuracy': accuracy}
