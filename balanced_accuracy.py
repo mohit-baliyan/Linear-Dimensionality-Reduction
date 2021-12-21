@@ -49,7 +49,7 @@ def calculate_accuracy(X, y, model, database):
         balanced_accuracy_10_folds = []
 
         j = 1
-        # inner loop for 10 fold stratified cross validation
+        # inner loop for 10-fold stratified cross validation
         for j in range(1, 11):
             # read folds from csv and convert into numpy array
             df_train = pd.read_csv('folds_' + database + '/train_fold_' + str(j) + '.csv', index_col=0)
