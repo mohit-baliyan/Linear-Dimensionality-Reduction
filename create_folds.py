@@ -14,7 +14,7 @@ def save_folds(X, y, database):
     df['y'] = y
 
     # create directory for saving folds
-    os.mkdir('Folds-Databases/folds_' + database)
+    os.mkdir('Folds-Databases/' + database)
 
     # initialize Stratified K fold cross validation
     skf = StratifiedKFold(n_splits=10, shuffle=False)
@@ -24,8 +24,8 @@ def save_folds(X, y, database):
     for train_index, test_index in skf.split(df, y):
 
         # slicing and save indices  to HDD
-        np.savetxt('Folds-Databases/folds_' + database + '/train_fold_' + str(fold_no) + '.txt', train_index)
-        np.savetxt('Folds-Databases/folds_' + database + '/test_fold_' + str(fold_no) + '.txt', test_index)
+        np.savetxt('Folds-Databases/' + database + '/train_fold_' + str(fold_no) + '.txt', train_index)
+        np.savetxt('Folds-Databases/' + database + '/test_fold_' + str(fold_no) + '.txt', test_index)
 
         fold_no = fold_no + 1
 
@@ -43,7 +43,7 @@ def main():
         y = data['Y']
 
         # call save_folds(X, y,  file ) if folds does not exist
-        if not os.path.isdir('Folds-Databases/folds_' + file):
+        if not os.path.isdir('Folds-Databases/' + file):
             save_folds(X, y, file)
 
 
