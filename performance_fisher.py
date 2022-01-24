@@ -166,6 +166,7 @@ def balanced_accuracy(file, dimensions):
 
 
 def fisher_performance():
+
     # read files of folded databases
     files = os.listdir('./Folds-Databases/')
 
@@ -203,6 +204,7 @@ def fisher_performance():
 
 
 def main():
+
     # results from fisher
     fisher_performance()
 
