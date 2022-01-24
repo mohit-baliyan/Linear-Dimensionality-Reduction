@@ -5,17 +5,17 @@ from numpy.linalg import eig
 class PCA:
 
     # function to calculate eigen values and eigen vector for any matrix
-    def eig_vector(self, x):
+    def eig_vector(self, X):
 
         # centralize
-        mean = np.mean(x, 0)
-        x_stand = x - mean
+        mean = np.mean(X, 0)
+        X_stand = X - mean
 
         # calculate correlation matrix
-        x_cov = np.corrcoef(np.transpose(x_stand))
+        X_cov = np.corrcoef(np.transpose(X_stand))
 
         # find the eigenvalues and eigenvectors
-        e, V = eig(x_cov)
+        e, V = eig(X_cov)
 
         # sort eigen vector according to eigen values
         idx = np.argsort(-e)
@@ -27,29 +27,29 @@ class PCA:
         return e, V
 
     # projection of X
-    def transformation(self, x, no_of_components):
+    def transformation(self, X, no_of_components):
 
-        e, V = self.eig_vector(x)
+        e, V = self.eig_vector(X)
         p = V[:, : no_of_components]
 
         # project the original dataset
-        mean = np.mean(x, 0)
-        x_stand = x - mean
-        x_transform = np.dot(x_stand, p)
+        mean = np.mean(X, 0)
+        X_stand = X - mean
+        X_transform = np.dot(X_stand, p)
 
-        return x_transform
+        return X_transform
 
 
 class SelectionMethods:
 
-    def __init__(self, x):
-        self.x = x
+    def __init__(self, X):
+        self.X = X
 
     # function return number of components
     def conditional_number(self):
 
         pca = PCA()
-        e, V = pca.eig_vector(self.x)
+        e, V = pca.eig_vector(self.X)
 
         # selection
         e_max = e[0]
@@ -65,7 +65,7 @@ class SelectionMethods:
     def kaiser_rule(self):
 
         pca = PCA()
-        e, V = pca.eig_vector(self.x)
+        e, V = pca.eig_vector(self.X)
 
         # selection
         return np.argmax(e < 1)
@@ -74,7 +74,7 @@ class SelectionMethods:
     def broken_stick(self):
 
         pca = PCA()
-        e, V = pca.eig_vector(self.x)
+        e, V = pca.eig_vector(self.X)
 
         # calculate the proportional variance
         prop_var = e / sum(e)

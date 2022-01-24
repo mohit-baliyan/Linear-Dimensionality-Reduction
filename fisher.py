@@ -24,7 +24,7 @@ class Fisher:
         self.direction = np.linalg.inv(matrix).dot(diff)
 
         # normalize fisher directions
-        self.direction = self.direction / np.sqrt(np.sum(np.power(self.direction, 2)))
+        self.direction = self.direction / np.sqrt(np.sum(np.square(self.direction)))
 
     # hypothetical function  h(x)
     def predict(self, X):
