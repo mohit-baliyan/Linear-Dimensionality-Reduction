@@ -8,7 +8,7 @@ class KNN:
     def __init__(self, k):
         self.k = k
 
-    # Function to store training set
+    # function to store training set
     def fit(self, X_train, y_train):
 
         self.X_train = X_train
@@ -17,7 +17,7 @@ class KNN:
         # no_of_training_examples, no_of_features
         self.m, self.n = self.X_train.shape
 
-    # Function for prediction
+    # function for prediction
     def predict(self, X_test):
 
         # no_of_test_examples, no_of_features
@@ -39,7 +39,7 @@ class KNN:
 
         return y_predict
 
-    # Function to find the k nearest neighbors to current test example
+    # function to find the k nearest neighbors to current test example
     def find_neighbors(self, X):
 
         # calculate all the euclidean distances between current test example x and training set X_train
