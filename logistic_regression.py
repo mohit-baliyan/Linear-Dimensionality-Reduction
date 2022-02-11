@@ -28,7 +28,7 @@ class LogitRegression:
 
         # training
         while ((np.sum(np.square(w_old - self.w) + np.sum(np.square(b_old - self.b)))) /
-               (np.sum(np.square((w_old + self.w) / 2)) + np.sum(np.square((b_old + self.b) / 2))) > 0.0001):
+               (np.sum(np.square((w_old + self.w) / 2)) + np.sum(np.square((b_old + self.b) / 2))) > 1e-9):
 
             # save old weights
             w_old = self.w
@@ -69,7 +69,7 @@ class LogitRegression:
         # compute a or y_hat
         a = self.predict(X)
         # compute cost function
-        J = -1 / self.m * np.sum(y * np.log(a) + (1 - y) * (np.log(1 - a)))
+        J = (-1 / self.m) * np.sum(y * np.log(a) + (1 - y) * (np.log(1 - a)))
         return J
 
     def gradients(self, X, y):

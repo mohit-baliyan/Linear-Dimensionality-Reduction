@@ -44,6 +44,8 @@ def balanced_accuracy(file, dimensions):
 
     for i in range(0, n):
 
+        print(i, "iteration initiated")
+
         balanced_accuracy = 0
         balanced_accuracy_K = 0
         balanced_accuracy_BS = 0
@@ -52,10 +54,12 @@ def balanced_accuracy(file, dimensions):
         # stratified 10-fold cross validation
         for j in range(1, 11):
 
+            print(j, "fold initiated")
+
             # selecting indices of training set
             train_set = pd.read_csv('Folds-Databases/' + file + '/train_fold_' + str(j) + '.txt', header=None)
             train_index = train_set.to_numpy()
-            mt, n = train_index.shape
+            mt, nf = train_index.shape
             train_index = np.reshape(train_index, mt)
             train = list(train_index)
             train = [int(item) for item in train]
@@ -63,7 +67,7 @@ def balanced_accuracy(file, dimensions):
             # selecting indices of test set for jth fold
             test_set = pd.read_csv('Folds-Databases/' + file + '/test_fold_' + str(j) + '.txt', header=None)
             test_index = test_set.to_numpy()
-            mv, n = test_index.shape
+            mv, nf = test_index.shape
             test_index = np.reshape(test_index, mv)
             test = list(test_index)
             test = [int(item) for item in test]
@@ -86,14 +90,14 @@ def balanced_accuracy(file, dimensions):
             y_train = df_train['y']
             y_test = df_test['y']
 
-            X_train_K = df_train_K.iloc[:, :-1]
-            X_test_K = df_test_K.iloc[:, :-1]
+            X_train_K = df_train_K.iloc[:, :]
+            X_test_K = df_test_K.iloc[:, :]
 
-            X_train_BS = df_train_BS.iloc[:, :-1]
-            X_test_BS = df_test_BS.iloc[:, :-1]
+            X_train_BS = df_train_BS.iloc[:, :]
+            X_test_BS = df_test_BS.iloc[:, :]
 
-            X_train_CN = df_train_CN.iloc[:, :-1]
-            X_test_CN = df_test_CN.iloc[:, :-1]
+            X_train_CN = df_train_CN.iloc[:, :]
+            X_test_CN = df_test_CN.iloc[:, :]
 
             # transform X_train, X_test
             X_train = X_train.to_numpy()
@@ -154,10 +158,22 @@ def balanced_accuracy(file, dimensions):
             y_test_predict_CN = np.where(y_test_predict_CN > threshold_CN, 1, 0)
             balanced_accuracy_CN = balanced_accuracy_CN + balanced_accuracy_score(y_test, y_test_predict_CN)
 
+            print(j, "folds executed ")
+
         total_balanced_accuracy = total_balanced_accuracy + balanced_accuracy / 10
         total_balanced_accuracy_K = total_balanced_accuracy_K + balanced_accuracy_K / 10
         total_balanced_accuracy_BS = total_balanced_accuracy_BS + balanced_accuracy_BS / 10
         total_balanced_accuracy_CN = total_balanced_accuracy_CN + balanced_accuracy_CN / 10
+
+        print(i, "iteration executed")
+
+    # delete cache
+    del data, X, y, pca, dim, X_Kaiser, X_BS, X_CN, df, df_K, df_BS, df_CN, n, i, balanced_accuracy, \
+        balanced_accuracy_K, balanced_accuracy_BS, balanced_accuracy_CN, j, train_set, train_index, mt, nf, train, \
+        test_set, test_index, mv, test, df_train, df_test, df_train_K, df_test_K, df_train_BS, df_test_BS, df_train_CN,\
+        df_test_CN, X_train, X_test, y_train, y_test, X_train_K, X_test_K, X_train_BS, X_test_BS, X_train_CN, \
+        X_test_CN, model1, y_train_predict, y_test_predict, model2, y_train_predict_K, y_test_predict_K, model3, \
+        y_train_predict_BS, y_test_predict_BS, model4, y_train_predict_CN, y_test_predict_CN
 
     return (total_balanced_accuracy / 10,
             total_balanced_accuracy_K / 10,
@@ -181,12 +197,17 @@ def fisher_performance():
     BA_CN = []
 
     for file in files:
+
+        print(file, "initiated dataset")
+
         Databases.append(file)
         ba, ba_k, ba_cn, ba_bs = balanced_accuracy(file, dimensions)
         BA.append(ba)
         BA_K.append(ba_k)
         BA_BS.append(ba_bs)
         BA_CN.append(ba_cn)
+
+        print(file, "dataset executed")
 
     # create dictionary, then convert into pandas dataframe to further save as a csv file
     dictionary = {
