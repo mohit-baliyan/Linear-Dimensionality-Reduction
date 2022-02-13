@@ -22,13 +22,13 @@ def main():
 
         # load one database at a time
         data = loadmat('./Databases/' + file)
-        X = data['X']
+        x = data['X']
 
         # standardise data
-        X = stats.zscore(X)
+        x = stats.zscore(x)
 
         # apply selection methods for calculating respective dimensions
-        methods = SelectionMethods(X)
+        methods = SelectionMethods(x)
 
         # for kaiser rule
         kaiser_comps.append(methods.kaiser_rule())
@@ -40,7 +40,7 @@ def main():
         conditional_comps.append(methods.conditional_number())
 
         # original dimensions
-        (m, n) = X.shape
+        (m, n) = x.shape
         databases.append(file)
         cases.append(m)
         original_attributes.append(n)
@@ -54,4 +54,5 @@ def main():
 
 
 if __name__ == "__main__":
+
     main()
