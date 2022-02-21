@@ -7,10 +7,10 @@ from sklearn.model_selection import StratifiedKFold
 
 
 # create folds and write their indices to HDD
-def save_folds(X, y, database):
+def save_folds(x, y, database):
 
-    # create dataframe df and later join vectors in X and vector y
-    df = pd.DataFrame(X)
+    # create dataframe df and later join vectors in x and vector y
+    df = pd.DataFrame(x)
     df['y'] = y
 
     # create directory for saving folds
@@ -39,12 +39,12 @@ def main():
     for file in files:
 
         data = loadmat('./Databases/' + file)
-        X = data['X']
+        x = data['X']
         y = data['Y']
 
-        # call save_folds(X, y,  file ) if folds does not exist
+        # call save_folds(x, y,  file ) if folds does not exist
         if not os.path.isdir('Folds-Databases/' + file):
-            save_folds(X, y, file)
+            save_folds(x, y, file)
 
 
 if __name__ == "__main__":

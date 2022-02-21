@@ -10,13 +10,13 @@ class LogitRegression:
         self.learning_rate = learning_rate
 
     # train model
-    def fit(self, X, y):
+    def fit(self, x, y):
 
         # local reference to avoid unnecessary reference
         learning_rate = self.learning_rate
 
         # no_of_training_examples, no_of_features
-        self.m, self.n = X.shape
+        self.m, self.n = x.shape
 
         # weight initialization
         self.w = np.random.rand(self.n)
@@ -28,60 +28,60 @@ class LogitRegression:
 
         # training
         while ((np.sum(np.square(w_old - self.w) + np.sum(np.square(b_old - self.b)))) /
-               (np.sum(np.square((w_old + self.w) / 2)) + np.sum(np.square((b_old + self.b) / 2))) > 1e-9):
+               (np.sum(np.square((w_old + self.w) / 2)) + np.sum(np.square((b_old + self.b) / 2))) > 1e-16):
 
             # save old weights
             w_old = self.w
             b_old = self.b
 
             # compute cost function and gradients
-            J1 = self.cost_function(X, y)
-            self.gradients(X, y)
+            j1 = self.cost_function(x, y)
+            self.gradients(x, y)
 
             # update weights
             self.w = self.w - learning_rate * self.dw
             self.b = self.b - learning_rate * self.db
 
             # compute cost function
-            J2 = self.cost_function(X, y)
+            j2 = self.cost_function(x, y)
 
             # if converged, increase the degree of convergence
-            if J2 <= J1:
-                while J2 <= J1:
+            if j2 <= j1:
+                while j2 <= j1:
                     # update weights
                     self.w = self.w - learning_rate * self.dw
                     self.b = self.b - learning_rate * self.db
                     learning_rate = learning_rate * 2
-                    J1 = J2
-                    J2 = self.cost_function(X, y)
+                    j1 = j2
+                    j2 = self.cost_function(x, y)
                 learning_rate = learning_rate / 2
                 self.w = self.w + learning_rate * self.dw
                 self.b = self.b + learning_rate * self.db
 
             else:
-                while J2 > J1:
+                while j2 > j1:
                     learning_rate = learning_rate / 2
                     self.w = self.w + learning_rate * self.dw
                     self.b = self.b + learning_rate * self.db
-                    J2 = self.cost_function(X, y)
+                    j2 = self.cost_function(x, y)
 
-    def cost_function(self, X, y):
+    def cost_function(self, x, y):
         # compute a or y_hat
-        a = self.predict(X)
+        a = self.predict(x)
         # compute cost function
-        J = (-1 / self.m) * np.sum(y * np.log(a) + (1 - y) * (np.log(1 - a)))
-        return J
+        j = (-1 / self.m) * np.sum(y * np.log(a) + (1 - y) * (np.log(1 - a)))
+        return j
 
-    def gradients(self, X, y):
+    def gradients(self, x, y):
         # calculate dJ/dw, dJ/db
-        a = self.predict(X)
+        a = self.predict(x)
         tmp = (a - y.T)
         tmp = np.reshape(tmp, self.m)
-        self.dw = np.dot(X.T, tmp) / self.m
+        self.dw = np.dot(x.T, tmp) / self.m
         self.db = np.sum(tmp) / self.m
         return self
 
     # hypothetical function  h(x)
-    def predict(self, X):
-        z = 1 / (1 + np.exp(- (X.dot(self.w) + self.b)))
+    def predict(self, x):
+        z = 1 / (1 + np.exp(- (x.dot(self.w) + self.b)))
         return z

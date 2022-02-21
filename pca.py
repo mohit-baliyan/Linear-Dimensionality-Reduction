@@ -97,6 +97,7 @@ class SelectionMethods:
         values expected from the “broken stick” distribution. The two distributions are compared element-by-element,
         and first value d + 1 where the expected values larger than the observed value determines the dimension. 
         '''
+
         no_of_components = np.argmax(prop_var < g)
 
         if no_of_components == 0:

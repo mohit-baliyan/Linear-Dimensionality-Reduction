@@ -9,30 +9,30 @@ class KNN:
         self.k = k
 
     # function to store training set
-    def fit(self, X_train, y_train):
+    def fit(self, x_train, y_train):
 
-        self.X_train = X_train
+        self.x_train = x_train
         self.y_train = y_train
 
         # no_of_training_examples, no_of_features
-        self.m, self.n = self.X_train.shape
+        self.m, self.n = self.x_train.shape
 
     # function for prediction
-    def predict(self, X_test):
+    def predict(self, x_test):
 
         # no_of_test_examples, no_of_features
-        m_test, n = X_test.shape
+        m_test, n = x_test.shape
 
         # initialize Y_predict
         y_predict = np.zeros(m_test)
 
         for i in range(m_test):
 
-            X = X_test[i]
+            x = x_test[i]
 
             # find the k nearest neighbors from current test example
             neighbors = np.zeros(self.k)
-            neighbors = self.find_neighbors(X)
+            neighbors = self.find_neighbors(x)
 
             # most frequent class in k neighbors
             y_predict[i] = mode(neighbors)[0][0]
@@ -40,17 +40,17 @@ class KNN:
         return y_predict
 
     # function to find the k nearest neighbors to current test example
-    def find_neighbors(self, X):
+    def find_neighbors(self, x):
 
         # calculate all the euclidean distances between current test example x and training set X_train
         euclidean_distances = np.zeros(self.m)
-        X = np.reshape(X, (1, self.n))
+        x = np.reshape(x, (1, self.n))
 
         # create x for broadcasting with X_train
-        X = np.repeat(X, repeats=self.m, axis=0)
+        x = np.repeat(x, repeats=self.m, axis=0)
 
-        # (X - Y)^2 = X^2 + Y^2 - 2 * X * Y
-        euclidean_distances = np.sum((np.square(X) + np.square(self.X_train) - 2 * self.X_train * X), axis=1)
+        # (x - y)^2 = x^2 + y^2 - 2 * x * y
+        euclidean_distances = np.sum((np.square(x) + np.square(self.x_train) - 2 * self.x_train * x), axis=1)
 
         # sort y_train according to euclidean_distance_array and store into y_train_sorted
         ids = euclidean_distances.argsort()
