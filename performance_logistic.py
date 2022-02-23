@@ -1,3 +1,4 @@
+# libraries
 import numpy as np
 from pca import PCA
 import pandas as pd
