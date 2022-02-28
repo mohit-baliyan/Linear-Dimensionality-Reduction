@@ -6,7 +6,6 @@ class PCA:
 
     # function to calculate eigen values and eigen vector for any matrix
     def eig_vector(self, x):
-
         # centralize
         mean = np.mean(x, 0)
         x_stand = x - mean
@@ -28,7 +27,6 @@ class PCA:
 
     # projection of X
     def transformation(self, x, no_of_components):
-
         e, v = self.eig_vector(x)
         p = v[:, : no_of_components]
 

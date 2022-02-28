@@ -3,8 +3,10 @@ import numpy as np
 
 class Fisher:
 
-    def fit(self, x, y):
+    def __init__(self):
+        self.direction = None
 
+    def fit(self, x, y):
         # samples segregation based on class
         x_class1 = x[np.where(y == 1)[0], :]
         x_class0 = x[np.where(y == 0)[0], :]
@@ -28,6 +30,5 @@ class Fisher:
 
     # hypothetical function  h(x)
     def predict(self, x):
-
         z = np.dot(x, self.direction)
         return z

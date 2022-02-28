@@ -6,7 +6,6 @@ from pca import SelectionMethods
 
 
 def main():
-
     # create list of databases
     files = os.listdir('./Databases/')
 
@@ -19,7 +18,6 @@ def main():
     conditional_comps = []
 
     for file in files:
-
         # load one database at a time
         data = loadmat('./Databases/' + file)
         x = data['X']
@@ -54,5 +52,4 @@ def main():
 
 
 if __name__ == "__main__":
-
     main()

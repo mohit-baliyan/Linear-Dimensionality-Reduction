@@ -6,11 +6,14 @@ from scipy.stats import mode
 class KNN:
 
     def __init__(self, k):
+        self.n = None
+        self.m = None
+        self.y_train = None
+        self.x_train = None
         self.k = k
 
     # function to store training set
     def fit(self, x_train, y_train):
-
         self.x_train = x_train
         self.y_train = y_train
 
@@ -19,20 +22,16 @@ class KNN:
 
     # function for prediction
     def predict(self, x_test):
-
         # no_of_test_examples, no_of_features
-        m_test, n = x_test.shape
+        m_test, self.n = x_test.shape
 
         # initialize Y_predict
         y_predict = np.zeros(m_test)
 
         for i in range(m_test):
-
-            x = x_test[i]
-
             # find the k nearest neighbors from current test example
             neighbors = np.zeros(self.k)
-            neighbors = self.find_neighbors(x)
+            neighbors = self.find_neighbors(x_test[i])
 
             # most frequent class in k neighbors
             y_predict[i] = mode(neighbors)[0][0]
@@ -41,7 +40,6 @@ class KNN:
 
     # function to find the k nearest neighbors to current test example
     def find_neighbors(self, x):
-
         # calculate all the euclidean distances between current test example x and training set X_train
         euclidean_distances = np.zeros(self.m)
         x = np.reshape(x, (1, self.n))
