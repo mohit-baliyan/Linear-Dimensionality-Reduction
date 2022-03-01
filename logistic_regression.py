@@ -7,6 +7,12 @@ class LogitRegression:
     def __init__(self, learning_rate):
 
         # initialize hyper parameters
+        self.db = None
+        self.dw = None
+        self.b = None
+        self.w = None
+        self.n = None
+        self.m = None
         self.learning_rate = learning_rate
 
     # train model
@@ -28,7 +34,7 @@ class LogitRegression:
 
         # training
         while ((np.sum(np.square(w_old - self.w) + np.sum(np.square(b_old - self.b)))) /
-               (np.sum(np.square((w_old + self.w) / 2)) + np.sum(np.square((b_old + self.b) / 2))) > 1e-16):
+               (np.sum(np.square((w_old + self.w) / 2)) + np.sum(np.square((b_old + self.b) / 2))) > 1e-9):
 
             # save old weights
             w_old = self.w

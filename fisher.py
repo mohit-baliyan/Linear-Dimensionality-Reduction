@@ -18,7 +18,12 @@ class Fisher:
         # calculate covariance matrices
         cov_x_class1 = np.cov(x_class1, rowvar=False)
         cov_x_class0 = np.cov(x_class0, rowvar=False)
+
         matrix = cov_x_class1 + cov_x_class0
+
+        if mean_x_class1.shape[0] == 1:
+            matrix = np.asarray([[matrix]])
+
         matrix = matrix + 0.001 * max(abs(np.diag(matrix))) * np.eye(np.size(mean_x_class1))
 
         # calculate fisher directions
