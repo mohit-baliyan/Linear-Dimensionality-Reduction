@@ -54,8 +54,8 @@ def best_k(file):
 
 
 def main():
-    k = best_k('vertebral.mat')
-    print('vertebral.mat', k)
+    k = best_k('LfW_faces.mat')
+    print('LfW_faces.mat', k)
 
 
 if __name__ == "__main__":

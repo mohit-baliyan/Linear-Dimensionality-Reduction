@@ -145,7 +145,7 @@ def main():
     # read dimensions.csv to read number of components
     dimensions = pd.read_csv('dimensions.csv')
 
-    b, b_k, b_bs, b_cn = balanced_accuracy('vertebral.mat', dimensions)
+    b, b_k, b_bs, b_cn = balanced_accuracy('EggEyeState.mat', dimensions)
 
     print("b : ", round(b, 4))
     print("b_k : ", round(b_k, 4))

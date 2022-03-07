@@ -18,9 +18,6 @@ class LogitRegression:
     # train model
     def fit(self, x, y):
 
-        # local reference to avoid unnecessary reference
-        learning_rate = self.learning_rate
-
         # no_of_training_examples, no_of_features
         self.m, self.n = x.shape
 
@@ -34,7 +31,7 @@ class LogitRegression:
 
         # training
         while ((np.sum(np.square(w_old - self.w) + np.sum(np.square(b_old - self.b)))) /
-               (np.sum(np.square((w_old + self.w) / 2)) + np.sum(np.square((b_old + self.b) / 2))) > 1e-16):
+               (np.sum(np.square((w_old + self.w) / 2)) + np.sum(np.square((b_old + self.b) / 2))) > 1e-9):
 
             # save old weights
             w_old = self.w
@@ -45,8 +42,8 @@ class LogitRegression:
             self.gradients(x, y)
 
             # update weights
-            self.w = self.w - learning_rate * self.dw
-            self.b = self.b - learning_rate * self.db
+            self.w = self.w - self.learning_rate * self.dw
+            self.b = self.b - self.learning_rate * self.db
 
             # compute cost function
             j2 = self.cost_function(x, y)
@@ -55,20 +52,20 @@ class LogitRegression:
             if j2 <= j1:
                 while j2 <= j1:
                     # update weights
-                    self.w = self.w - learning_rate * self.dw
-                    self.b = self.b - learning_rate * self.db
-                    learning_rate = learning_rate * 2
+                    self.w = self.w - self.learning_rate * self.dw
+                    self.b = self.b - self.learning_rate * self.db
+                    self.learning_rate = self.learning_rate * 2
                     j1 = j2
                     j2 = self.cost_function(x, y)
-                learning_rate = learning_rate / 2
-                self.w = self.w + learning_rate * self.dw
-                self.b = self.b + learning_rate * self.db
+                self.learning_rate = self.learning_rate / 2
+                self.w = self.w + self.learning_rate * self.dw
+                self.b = self.b + self.learning_rate * self.db
 
             else:
                 while j2 > j1:
-                    learning_rate = learning_rate / 2
-                    self.w = self.w + learning_rate * self.dw
-                    self.b = self.b + learning_rate * self.db
+                    self.learning_rate = self.learning_rate / 2
+                    self.w = self.w + self.learning_rate * self.dw
+                    self.b = self.b + self.learning_rate * self.db
                     j2 = self.cost_function(x, y)
 
     def cost_function(self, x, y):

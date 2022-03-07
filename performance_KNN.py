@@ -73,21 +73,21 @@ def balanced_accuracy(file, dimensions):
             y_test = np.take(y, test, axis=0)
 
             # without dimensionality reduction
-            model1 = KNN(k=17)
+            model1 = KNN(k=3)
             model1.fit(x_train, y_train)
             # predict on test set
             y_predict = model1.predict(x_test)
             balance_accuracy = balance_accuracy + balanced_accuracy_score(y_test, y_predict)
 
             # for kaiser
-            model2 = KNN(k=17)
+            model2 = KNN(k=3)
             model2.fit(x_train_k, y_train)
             # predict on test set
             y_predict_k = model2.predict(x_test_k)
             balanced_accuracy_k = balanced_accuracy_k + balanced_accuracy_score(y_test, y_predict_k)
 
             # for BS
-            model3 = KNN(k=17)
+            model3 = KNN(k=3)
             model3.fit(x_train_bs, y_train)
             # predict on test set
             y_predict_bs = model3.predict(x_test_bs)
@@ -122,7 +122,7 @@ def main():
     # read dimensions.csv to read number of components
     dimensions = pd.read_csv('dimensions.csv')
 
-    b, b_k, b_bs, b_cn = balanced_accuracy('vertebral.mat', dimensions)
+    b, b_k, b_bs, b_cn = balanced_accuracy('EggEyeState.mat', dimensions)
 
     print("b : ", round(b, 4))
     print("b_k : ", round(b_k, 4))
