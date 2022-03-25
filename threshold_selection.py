@@ -7,7 +7,7 @@ def threshold_selection(z, y):
     n = np.size(z)
 
     # reshape y into 1 D as of z
-    y = np.reshape(y, n)
+    # y = np.reshape(y, n)
 
     # define set of unique values with all possible points
     threshold = np.unique(z)

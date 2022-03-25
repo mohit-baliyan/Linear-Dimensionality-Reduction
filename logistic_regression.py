@@ -1,11 +1,11 @@
 import numpy as np
+np.seterr(divide='ignore')
 
 
 # Logistic Regression
 class LogitRegression:
 
-    def __init__(self, learning_rate):
-
+    def __init__(self, learning_rate, tol):
         # initialize hyper parameters
         self.db = None
         self.dw = None
@@ -14,10 +14,10 @@ class LogitRegression:
         self.n = None
         self.m = None
         self.learning_rate = learning_rate
+        self.tol = tol
 
     # train model
     def fit(self, x, y):
-
         # no_of_training_examples, no_of_features
         self.m, self.n = x.shape
 
@@ -30,8 +30,9 @@ class LogitRegression:
         b_old = 0
 
         # training
-        while ((np.sum(np.square(w_old - self.w) + np.sum(np.square(b_old - self.b)))) /
-               (np.sum(np.square((w_old + self.w) / 2)) + np.sum(np.square((b_old + self.b) / 2))) > 1e-9):
+
+        while ((np.sum(np.square(w_old - self.w)) + np.square(b_old - self.b)) /
+               (np.sum(np.square((w_old + self.w) / 2)) + np.square((b_old + self.b) / 2))) > self.tol:
 
             # save old weights
             w_old = self.w
@@ -77,14 +78,17 @@ class LogitRegression:
 
     def gradients(self, x, y):
         # calculate dJ/dw, dJ/db
-        a = self.predict(x)
-        tmp = (a - y.T)
-        tmp = np.reshape(tmp, self.m)
-        self.dw = np.dot(x.T, tmp) / self.m
-        self.db = np.sum(tmp) / self.m
+        self.dw = np.dot(x.T, np.reshape(self.predict(x), -1) - np.reshape(y, -1)) / self.m
+        self.db = np.sum(np.reshape(self.predict(x), -1) - np.reshape(y, -1)) / self.m
         return self
 
     # hypothetical function  h(x)
     def predict(self, x):
         z = 1 / (1 + np.exp(- (x.dot(self.w) + self.b)))
         return z
+
+    # hypothetical function h(x)
+    def predict_sklearn(self, x, w, b):
+        z = 1 / (1 + np.exp(- (x.dot(w.T) + b)))
+        return z
+
