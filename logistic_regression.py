@@ -1,5 +1,4 @@
 import numpy as np
-np.seterr(divide='ignore')
 
 
 # Logistic Regression
@@ -91,4 +90,3 @@ class LogitRegression:
     def predict_sklearn(self, x, w, b):
         z = 1 / (1 + np.exp(- (x.dot(w.T) + b)))
         return z
-

@@ -2,7 +2,6 @@ import numpy as np
 
 
 def threshold_selection(z, y):
-
     # total number of examples
     n = np.size(z)
 

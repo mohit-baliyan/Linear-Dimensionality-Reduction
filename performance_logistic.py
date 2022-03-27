@@ -1,7 +1,4 @@
-import warnings
 import numpy as np
-from sklearn.exceptions import DataConversionWarning
-
 from pca import PCA
 import pandas as pd
 from scipy.io import loadmat
@@ -10,8 +7,6 @@ from logistic_regression import LogitRegression
 from sklearn.metrics import balanced_accuracy_score
 from threshold_selection import threshold_selection
 from sklearn.linear_model import LogisticRegression
-
-warnings.filterwarnings(action='ignore', category=DataConversionWarning)
 
 
 def balanced_accuracy(file, dimensions):
@@ -153,60 +148,6 @@ def main():
     dimensions = pd.read_csv('dimensions.csv')
 
     b, b_k, b_bs, b_cn = balanced_accuracy('Musk.mat', dimensions)
-
-    print("b : ", round(b, 4))
-    print("b_k : ", round(b_k, 4))
-    print("b_bs : ", round(b_bs, 4))
-    print("b_cn : ", round(b_cn, 4))
-
-    print(";;;;;;;;;;;;;;;;;;;plrx;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;")
-
-    b, b_k, b_bs, b_cn = balanced_accuracy('plrx.mat', dimensions)
-
-    print("b : ", round(b, 4))
-    print("b_k : ", round(b_k, 4))
-    print("b_bs : ", round(b_bs, 4))
-    print("b_cn : ", round(b_cn, 4))
-
-    print(";;;;;;;;;;;;;;;;;;qsar;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;")
-
-    b, b_k, b_bs, b_cn = balanced_accuracy('qsar.mat', dimensions)
-
-    print("b : ", round(b, 4))
-    print("b_k : ", round(b_k, 4))
-    print("b_bs : ", round(b_bs, 4))
-    print("b_cn : ", round(b_cn, 4))
-
-    print(";;;;;;;;;;;;;;;;;;;sonar.mat;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;")
-
-    b, b_k, b_bs, b_cn = balanced_accuracy('sonar.mat', dimensions)
-
-    print("b : ", round(b, 4))
-    print("b_k : ", round(b_k, 4))
-    print("b_bs : ", round(b_bs, 4))
-    print("b_cn : ", round(b_cn, 4))
-
-    print(";;;;;;;;;;;;;;;;;;;spect.mat;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;")
-
-    b, b_k, b_bs, b_cn = balanced_accuracy('spect.mat', dimensions)
-
-    print("b : ", round(b, 4))
-    print("b_k : ", round(b_k, 4))
-    print("b_bs : ", round(b_bs, 4))
-    print("b_cn : ", round(b_cn, 4))
-
-    print(";;;;;;;;;;;;;;;;;;;spectf.mat;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;")
-
-    b, b_k, b_bs, b_cn = balanced_accuracy('spectf.mat', dimensions)
-
-    print("b : ", round(b, 4))
-    print("b_k : ", round(b_k, 4))
-    print("b_bs : ", round(b_bs, 4))
-    print("b_cn : ", round(b_cn, 4))
-
-    print(";;;;;;;;;;;;;;;;;;;vertebral.mat;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;")
-
-    b, b_k, b_bs, b_cn = balanced_accuracy('vertebral.mat', dimensions)
 
     print("b : ", round(b, 4))
     print("b_k : ", round(b_k, 4))

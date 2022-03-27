@@ -1,5 +1,4 @@
 import os
-import warnings
 import numpy as np
 import pandas as pd
 from scipy.io import loadmat
@@ -24,17 +23,13 @@ def save_folds(x, y, database):
         # slicing and save indices  to HDD
         np.savetxt('Folds-Databases/' + database + '/train_fold_' + str(fold_no) + '.txt', train_index)
         np.savetxt('Folds-Databases/' + database + '/test_fold_' + str(fold_no) + '.txt', test_index)
-
         fold_no = fold_no + 1
 
 
 def main():
-    warnings.filterwarnings("ignore")
-
     # load one database at a time
     files = os.listdir('./Databases/')
     for file in files:
-
         data = loadmat('./Databases/' + file)
         x = data['X']
         y = data['Y']
