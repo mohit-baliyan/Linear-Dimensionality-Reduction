@@ -54,8 +54,26 @@ def best_k(file):
 
 
 def main():
+    k = best_k('maledon.mat')
+    print('maledon.mat', k)
+
+    k = best_k('minboone.mat')
+    print('minboone.mat', k)
+
     k = best_k('LfW_faces.mat')
     print('LfW_faces.mat', k)
+
+    k = best_k('Musk2.mat')
+    print('Musk2.mat', k)
+
+    k = best_k('Musk2.mat')
+    print('Musk2.mat', k)
+
+    k = best_k('skin.mat')
+    print('skin.mat', k)
+
+    k = best_k('telescope.mat')
+    print('telescope.mat', k)
 
 
 if __name__ == "__main__":
