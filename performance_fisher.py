@@ -32,6 +32,13 @@ def balanced_accuracy(file, dimensions):
     total_balanced_accuracy_bs = 0
     total_balanced_accuracy_cn = 0
 
+    b_full = []
+    b_kaiser = []
+    b_bs = []
+    b_cn = []
+
+    counter = 0
+
     for i in range(0, n):
 
         balance_accuracy = 0
@@ -83,7 +90,9 @@ def balanced_accuracy(file, dimensions):
             # predict on test set
             y_test_predict = model1.predict(x_test)
             y_test_predict = np.where(y_test_predict > threshold, 1, 0)
-            balance_accuracy = balance_accuracy + balanced_accuracy_score(y_test, y_test_predict)
+            acc1 = balanced_accuracy_score(y_test, y_test_predict)
+            balance_accuracy = balance_accuracy + acc1
+            b_full.append(acc1)
 
             # for kaiser
             model2 = Fisher()
@@ -95,7 +104,9 @@ def balanced_accuracy(file, dimensions):
             # predict on test set
             y_test_predict_k = model2.predict(x_test_k)
             y_test_predict_k = np.where(y_test_predict_k > threshold_k, 1, 0)
-            balanced_accuracy_k = balanced_accuracy_k + balanced_accuracy_score(y_test, y_test_predict_k)
+            acc2 = balanced_accuracy_score(y_test, y_test_predict_k)
+            balanced_accuracy_k = balanced_accuracy_k + acc2
+            b_kaiser.append(acc2)
 
             # for BS
             model3 = Fisher()
@@ -106,7 +117,9 @@ def balanced_accuracy(file, dimensions):
             threshold_bs = threshold_selection(y_train_predict_bs, y_train)
             y_test_predict_bs = model3.predict(x_test_bs)
             y_test_predict_bs = np.where(y_test_predict_bs > threshold_bs, 1, 0)
-            balanced_accuracy_bs = balanced_accuracy_bs + balanced_accuracy_score(y_test, y_test_predict_bs)
+            acc3 = balanced_accuracy_score(y_test, y_test_predict_bs)
+            balanced_accuracy_bs = balanced_accuracy_bs + acc3
+            b_bs.append(acc3)
 
             # for CN
             model4 = Fisher()
@@ -117,36 +130,37 @@ def balanced_accuracy(file, dimensions):
             threshold_cn = threshold_selection(y_train_predict_cn, y_train)
             y_test_predict_cn = model4.predict(x_test_cn)
             y_test_predict_cn = np.where(y_test_predict_cn > threshold_cn, 1, 0)
-            balanced_accuracy_cn = balanced_accuracy_cn + balanced_accuracy_score(y_test, y_test_predict_cn)
-
-            print(j)
+            acc4 = balanced_accuracy_score(y_test, y_test_predict_cn)
+            balanced_accuracy_cn = balanced_accuracy_cn + acc4
+            b_cn.append(acc4)
 
         total_balanced_accuracy = total_balanced_accuracy + balance_accuracy / 10
         total_balanced_accuracy_k = total_balanced_accuracy_k + balanced_accuracy_k / 10
         total_balanced_accuracy_bs = total_balanced_accuracy_bs + balanced_accuracy_bs / 10
         total_balanced_accuracy_cn = total_balanced_accuracy_cn + balanced_accuracy_cn / 10
 
-        print(i)
+        counter = counter + 1
+        print(counter)
 
-    # delete cache
-    del data, x, y, pca, dim, x_kaiser, x_bs, x_cn, n, i, balance_accuracy, \
-        balanced_accuracy_k, balanced_accuracy_bs, balanced_accuracy_cn, j, train_set, train_index, mt, nf, train, \
-        test_set, test_index, mv, test, x_train, x_test, y_train, y_test, x_train_k, x_test_k, x_train_bs, x_test_bs, \
-        x_train_cn, x_test_cn, model1, y_train_predict, y_test_predict, model2, y_train_predict_k, y_test_predict_k, \
-        model3, y_train_predict_bs, y_test_predict_bs, model4, y_train_predict_cn, y_test_predict_cn
-
-    return (total_balanced_accuracy / 10,
+    return [total_balanced_accuracy / 10,
             total_balanced_accuracy_k / 10,
             total_balanced_accuracy_bs / 10,
-            total_balanced_accuracy_cn / 10)
+            total_balanced_accuracy_cn / 10, b_full, b_kaiser, b_bs, b_cn]
 
 
 def main():
     # read dimensions.csv to read number of components
     dimensions = pd.read_csv('dimensions.csv')
 
-    b, b_k, b_bs, b_cn, s, sb = balanced_accuracy('EggEyeState.mat', dimensions)
-
+    file = 'qsar.mat'
+    [b, b_k, b_bs, b_cn, sample_full, sample_kaiser, sample_bs, sample_cn] = balanced_accuracy(file, dimensions)
+    Banknote_accuracy = pd.DataFrame({
+        'D': sample_full,
+        'Kaiser': sample_kaiser,
+        'Broken': sample_bs,
+        'Condition': sample_cn
+    })
+    Banknote_accuracy.to_csv('fisher_' + file, index=False)
     print("b : ", round(b, 4))
     print("b_k : ", round(b_k, 4))
     print("b_bs : ", round(b_bs, 4))
