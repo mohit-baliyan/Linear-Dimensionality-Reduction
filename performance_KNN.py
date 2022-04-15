@@ -7,7 +7,7 @@ from scipy.stats import zscore
 from sklearn.metrics import balanced_accuracy_score
 
 
-def balanced_accuracy(file, dimensions):
+def balanced_accuracy(file, dimensions, k):
     # load database
     data = loadmat('Databases/' + file)
     x = data['X']
@@ -30,6 +30,13 @@ def balanced_accuracy(file, dimensions):
     total_balanced_accuracy_k = 0
     total_balanced_accuracy_bs = 0
     total_balanced_accuracy_cn = 0
+
+    b_full = []
+    b_kaiser = []
+    b_bs = []
+    b_cn = []
+
+    counter = 0
 
     for i in range(0, n):
 
@@ -73,57 +80,262 @@ def balanced_accuracy(file, dimensions):
             y_test = np.take(y, test, axis=0)
 
             # without dimensionality reduction
-            model1 = KNN(k=3)
+            model1 = KNN(k=k)
             model1.fit(x_train, y_train)
             # predict on test set
-            y_predict = model1.predict(x_test)
-            balance_accuracy = balance_accuracy + balanced_accuracy_score(y_test, y_predict)
+            y_test_predict = model1.predict(x_test)
+            acc1 = balanced_accuracy_score(y_test, y_test_predict)
+            balance_accuracy = balance_accuracy + acc1
+            b_full.append(acc1)
 
             # for kaiser
-            model2 = KNN(k=3)
+            model2 = KNN(k=k)
             model2.fit(x_train_k, y_train)
             # predict on test set
-            y_predict_k = model2.predict(x_test_k)
-            balanced_accuracy_k = balanced_accuracy_k + balanced_accuracy_score(y_test, y_predict_k)
+            y_test_predict_k = model2.predict(x_test_k)
+            acc2 = balanced_accuracy_score(y_test, y_test_predict_k)
+            balanced_accuracy_k = balanced_accuracy_k + acc2
+            b_kaiser.append(acc2)
 
             # for BS
-            model3 = KNN(k=3)
+            model3 = KNN(k=k)
             model3.fit(x_train_bs, y_train)
-            # predict on test set
-            y_predict_bs = model3.predict(x_test_bs)
-            balanced_accuracy_bs = balanced_accuracy_bs + balanced_accuracy_score(y_test, y_predict_bs)
+            y_test_predict_bs = model3.predict(x_test_bs)
+            acc3 = balanced_accuracy_score(y_test, y_test_predict_bs)
+            balanced_accuracy_bs = balanced_accuracy_bs + acc3
+            b_bs.append(acc3)
 
             # for CN
-            model4 = KNN(k=17)
+            model4 = KNN(k=k)
             model4.fit(x_train_cn, y_train)
-            # predict on test set
-            y_predict_cn = model4.predict(x_test_cn)
-            balanced_accuracy_cn = balanced_accuracy_cn + balanced_accuracy_score(y_test, y_predict_cn)
+            y_test_predict_cn = model4.predict(x_test_cn)
+            acc4 = balanced_accuracy_score(y_test, y_test_predict_cn)
+            balanced_accuracy_cn = balanced_accuracy_cn + acc4
+            b_cn.append(acc4)
 
         total_balanced_accuracy = total_balanced_accuracy + balance_accuracy / 10
         total_balanced_accuracy_k = total_balanced_accuracy_k + balanced_accuracy_k / 10
         total_balanced_accuracy_bs = total_balanced_accuracy_bs + balanced_accuracy_bs / 10
         total_balanced_accuracy_cn = total_balanced_accuracy_cn + balanced_accuracy_cn / 10
 
-    # delete cache
-    del data, x, y, pca, dim, x_kaiser, x_bs, x_cn, n, i, balance_accuracy, \
-        balanced_accuracy_k, balanced_accuracy_bs, balanced_accuracy_cn, j, train_set, train_index, mt, nf, train, \
-        test_set, test_index, mv, test, x_train, x_test, y_train, y_test, x_train_k, x_test_k, x_train_bs, x_test_bs, \
-        x_train_cn, x_test_cn, model1, y_predict, model2, y_predict_k, model3, \
-        y_predict_bs, model4, y_predict_cn,
+        counter = counter + 1
+        print(counter)
 
-    return (total_balanced_accuracy / 10,
+    return [total_balanced_accuracy / 10,
             total_balanced_accuracy_k / 10,
             total_balanced_accuracy_bs / 10,
-            total_balanced_accuracy_cn / 10)
+            total_balanced_accuracy_cn / 10, b_full, b_kaiser, b_bs, b_cn]
 
 
 def main():
     # read dimensions.csv to read number of components
     dimensions = pd.read_csv('dimensions.csv')
 
-    b, b_k, b_bs, b_cn = balanced_accuracy('EggEyeState.mat', dimensions)
+    print('breastCancer.mat')
+    file = 'breastCancer.mat'
+    [b, b_k, b_bs, b_cn, sample_full, sample_kaiser, sample_bs, sample_cn] = balanced_accuracy(file, dimensions, )
+    Banknote_accuracy = pd.DataFrame({
+        'D': sample_full,
+        'Kaiser': sample_kaiser,
+        'Broken': sample_bs,
+        'Condition': sample_cn
+    })
+    Banknote_accuracy.to_csv('knn_' + file, index=False)
+    print("b : ", round(b, 4))
+    print("b_k : ", round(b_k, 4))
+    print("b_bs : ", round(b_bs, 4))
+    print("b_cn : ", round(b_cn, 4))
 
+    print('climate.mat')
+    file = 'climate.mat'
+    [b, b_k, b_bs, b_cn, sample_full, sample_kaiser, sample_bs, sample_cn] = balanced_accuracy(file, dimensions, )
+    Banknote_accuracy = pd.DataFrame({
+        'D': sample_full,
+        'Kaiser': sample_kaiser,
+        'Broken': sample_bs,
+        'Condition': sample_cn
+    })
+    Banknote_accuracy.to_csv('knn_' + file, index=False)
+    print("b : ", round(b, 4))
+    print("b_k : ", round(b_k, 4))
+    print("b_bs : ", round(b_bs, 4))
+    print("b_cn : ", round(b_cn, 4))
+
+    print('Cryotherapy.mat')
+    file = 'Cryotherapy.mat'
+    [b, b_k, b_bs, b_cn, sample_full, sample_kaiser, sample_bs, sample_cn] = balanced_accuracy(file, dimensions, )
+    Banknote_accuracy = pd.DataFrame({
+        'D': sample_full,
+        'Kaiser': sample_kaiser,
+        'Broken': sample_bs,
+        'Condition': sample_cn
+    })
+    Banknote_accuracy.to_csv('knn_' + file, index=False)
+    print("b : ", round(b, 4))
+    print("b_k : ", round(b_k, 4))
+    print("b_bs : ", round(b_bs, 4))
+    print("b_cn : ", round(b_cn, 4))
+
+    print('diabetic.mat')
+    file = 'diabetic.mat'
+    [b, b_k, b_bs, b_cn, sample_full, sample_kaiser, sample_bs, sample_cn] = balanced_accuracy(file, dimensions, )
+    Banknote_accuracy = pd.DataFrame({
+        'D': sample_full,
+        'Kaiser': sample_kaiser,
+        'Broken': sample_bs,
+        'Condition': sample_cn
+    })
+    Banknote_accuracy.to_csv('knn_' + file, index=False)
+    print("b : ", round(b, 4))
+    print("b_k : ", round(b_k, 4))
+    print("b_bs : ", round(b_bs, 4))
+    print("b_cn : ", round(b_cn, 4))
+
+    print('Immunotherapy.mat')
+    file = 'Immunotherapy.mat'
+    [b, b_k, b_bs, b_cn, sample_full, sample_kaiser, sample_bs, sample_cn] = balanced_accuracy(file, dimensions, )
+    Banknote_accuracy = pd.DataFrame({
+        'D': sample_full,
+        'Kaiser': sample_kaiser,
+        'Broken': sample_bs,
+        'Condition': sample_cn
+    })
+    Banknote_accuracy.to_csv('knn_' + file, index=False)
+    print("b : ", round(b, 4))
+    print("b_k : ", round(b_k, 4))
+    print("b_bs : ", round(b_bs, 4))
+    print("b_cn : ", round(b_cn, 4))
+
+    print('liver.mat')
+    file = 'liver.mat'
+    [b, b_k, b_bs, b_cn, sample_full, sample_kaiser, sample_bs, sample_cn] = balanced_accuracy(file, dimensions,)
+    Banknote_accuracy = pd.DataFrame({
+        'D': sample_full,
+        'Kaiser': sample_kaiser,
+        'Broken': sample_bs,
+        'Condition': sample_cn
+    })
+    Banknote_accuracy.to_csv('knn_' + file, index=False)
+    print("b : ", round(b, 4))
+    print("b_k : ", round(b_k, 4))
+    print("b_bs : ", round(b_bs, 4))
+    print("b_cn : ", round(b_cn, 4))
+
+    print('maledon.mat')
+    file = 'maledon.mat'
+    [b, b_k, b_bs, b_cn, sample_full, sample_kaiser, sample_bs, sample_cn] = balanced_accuracy(file, dimensions, )
+    Banknote_accuracy = pd.DataFrame({
+        'D': sample_full,
+        'Kaiser': sample_kaiser,
+        'Broken': sample_bs,
+        'Condition': sample_cn
+    })
+    Banknote_accuracy.to_csv('knn_' + file, index=False)
+    print("b : ", round(b, 4))
+    print("b_k : ", round(b_k, 4))
+    print("b_bs : ", round(b_bs, 4))
+    print("b_cn : ", round(b_cn, 4))
+
+    print('Musk.mat')
+    file = 'Musk.mat'
+    [b, b_k, b_bs, b_cn, sample_full, sample_kaiser, sample_bs, sample_cn] = balanced_accuracy(file, dimensions,)
+    Banknote_accuracy = pd.DataFrame({
+        'D': sample_full,
+        'Kaiser': sample_kaiser,
+        'Broken': sample_bs,
+        'Condition': sample_cn
+    })
+    Banknote_accuracy.to_csv('knn_' + file, index=False)
+    print("b : ", round(b, 4))
+    print("b_k : ", round(b_k, 4))
+    print("b_bs : ", round(b_bs, 4))
+    print("b_cn : ", round(b_cn, 4))
+
+    print('plrx.mat')
+    file = 'plrx.mat'
+    [b, b_k, b_bs, b_cn, sample_full, sample_kaiser, sample_bs, sample_cn] = balanced_accuracy(file, dimensions, )
+    Banknote_accuracy = pd.DataFrame({
+        'D': sample_full,
+        'Kaiser': sample_kaiser,
+        'Broken': sample_bs,
+        'Condition': sample_cn
+    })
+    Banknote_accuracy.to_csv('knn_' + file, index=False)
+    print("b : ", round(b, 4))
+    print("b_k : ", round(b_k, 4))
+    print("b_bs : ", round(b_bs, 4))
+    print("b_cn : ", round(b_cn, 4))
+
+    print('qsar.mat')
+    file = 'qsar.mat'
+    [b, b_k, b_bs, b_cn, sample_full, sample_kaiser, sample_bs, sample_cn] = balanced_accuracy(file, dimensions, )
+    Banknote_accuracy = pd.DataFrame({
+        'D': sample_full,
+        'Kaiser': sample_kaiser,
+        'Broken': sample_bs,
+        'Condition': sample_cn
+    })
+    Banknote_accuracy.to_csv('knn_' + file, index=False)
+    print("b : ", round(b, 4))
+    print("b_k : ", round(b_k, 4))
+    print("b_bs : ", round(b_bs, 4))
+    print("b_cn : ", round(b_cn, 4))
+
+    print('sonar.mat')
+    file = 'sonar.mat'
+    [b, b_k, b_bs, b_cn, sample_full, sample_kaiser, sample_bs, sample_cn] = balanced_accuracy(file, dimensions, )
+    Banknote_accuracy = pd.DataFrame({
+        'D': sample_full,
+        'Kaiser': sample_kaiser,
+        'Broken': sample_bs,
+        'Condition': sample_cn
+    })
+    Banknote_accuracy.to_csv('knn_' + file, index=False)
+    print("b : ", round(b, 4))
+    print("b_k : ", round(b_k, 4))
+    print("b_bs : ", round(b_bs, 4))
+    print("b_cn : ", round(b_cn, 4))
+
+    print('spect.mat')
+    file = 'spect.mat'
+    [b, b_k, b_bs, b_cn, sample_full, sample_kaiser, sample_bs, sample_cn] = balanced_accuracy(file, dimensions, )
+    Banknote_accuracy = pd.DataFrame({
+        'D': sample_full,
+        'Kaiser': sample_kaiser,
+        'Broken': sample_bs,
+        'Condition': sample_cn
+    })
+    Banknote_accuracy.to_csv('knn_' + file, index=False)
+    print("b : ", round(b, 4))
+    print("b_k : ", round(b_k, 4))
+    print("b_bs : ", round(b_bs, 4))
+    print("b_cn : ", round(b_cn, 4))
+
+    print('spectf.mat')
+    file = 'spectf.mat'
+    [b, b_k, b_bs, b_cn, sample_full, sample_kaiser, sample_bs, sample_cn] = balanced_accuracy(file, dimensions, )
+    Banknote_accuracy = pd.DataFrame({
+        'D': sample_full,
+        'Kaiser': sample_kaiser,
+        'Broken': sample_bs,
+        'Condition': sample_cn
+    })
+    Banknote_accuracy.to_csv('knn_' + file, index=False)
+    print("b : ", round(b, 4))
+    print("b_k : ", round(b_k, 4))
+    print("b_bs : ", round(b_bs, 4))
+    print("b_cn : ", round(b_cn, 4))
+
+    print('vertebral.mat')
+    file = 'vertebral.mat'
+    [b, b_k, b_bs, b_cn, sample_full, sample_kaiser, sample_bs, sample_cn] = balanced_accuracy(file, dimensions, )
+    Banknote_accuracy = pd.DataFrame({
+        'D': sample_full,
+        'Kaiser': sample_kaiser,
+        'Broken': sample_bs,
+        'Condition': sample_cn
+    })
+    Banknote_accuracy.to_csv('knn_' + file, index=False)
     print("b : ", round(b, 4))
     print("b_k : ", round(b_k, 4))
     print("b_bs : ", round(b_bs, 4))

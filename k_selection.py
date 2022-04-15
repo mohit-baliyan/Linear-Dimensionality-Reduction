@@ -1,6 +1,4 @@
-import os
 from knn import KNN
-import pandas as pd
 from scipy.io import loadmat
 from scipy.stats import zscore
 from sklearn.model_selection import LeaveOneOut
@@ -56,26 +54,8 @@ def best_k(file):
 
 
 def main():
-    # create list of databases
-    files = os.listdir('./Databases/')
-
-    # initialize lists to store each database name and best k for that database
-    databases = []
-    K = []
-
-    for file in files:
-        # find best K
-        databases.append(file)
-        K.append(best_k(file))
-        print(file, "success")
-
-    # create dictionary, then convert into pandas dataframe to further save as a csv file
-    dictionary = {'Databases': databases, 'K': K}
-
-    df = pd.DataFrame(dictionary)
-    df.to_csv('best_K.csv')
-
-    print("succeed")
+    # search best K for that dataset
+    print("telescope.mat : ", best_k('telescope.mat'))
 
 
 if __name__ == "__main__":
