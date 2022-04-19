@@ -48,6 +48,8 @@ def balanced_accuracy(file, dimensions):
 
         # stratified 10-fold cross validation
         for j in range(1, 11):
+            counter = counter + 1
+            print(counter)
             # selecting indices of training set
             train_set = pd.read_csv('Folds-Databases/' + file + '/train_fold_' + str(j) + '.txt', header=None)
             train_index = train_set.to_numpy()
@@ -139,9 +141,6 @@ def balanced_accuracy(file, dimensions):
         total_balanced_accuracy_bs = total_balanced_accuracy_bs + balanced_accuracy_bs / 10
         total_balanced_accuracy_cn = total_balanced_accuracy_cn + balanced_accuracy_cn / 10
 
-        counter = counter + 1
-        print(counter)
-
     return [total_balanced_accuracy / 10,
             total_balanced_accuracy_k / 10,
             total_balanced_accuracy_bs / 10,
@@ -152,16 +151,15 @@ def main():
     # read dimensions.csv to read number of components
     dimensions = pd.read_csv('dimensions.csv')
 
-    print('Cryotherapy.mat')
-    file = 'Cryotherapy.mat'
+    file = 'HTRU2.mat'
     [b, b_k, b_bs, b_cn, sample_full, sample_kaiser, sample_bs, sample_cn] = balanced_accuracy(file, dimensions)
-    Banknote_accuracy = pd.DataFrame({
+    accuracy = pd.DataFrame({
         'D': sample_full,
         'Kaiser': sample_kaiser,
         'Broken': sample_bs,
         'Condition': sample_cn
     })
-    Banknote_accuracy.to_csv('fisher_' + file, index=False)
+    accuracy.to_csv('fisher_' + file, index=False)
     print("b : ", round(b, 4))
     print("b_k : ", round(b_k, 4))
     print("b_bs : ", round(b_bs, 4))
