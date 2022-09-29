@@ -1,1 +1,1 @@
-# dimension-estimation
+# dimension-reduction
