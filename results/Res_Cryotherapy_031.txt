@@ -1,0 +1,13 @@
+Dim	Classifier	Score
+6	KNN	1.0
+6	LR	1.0
+6	FLD	1.0
+3	KNN	1.0
+3	LR	0.875
+3	FLD	0.875
+1	KNN	0.9
+1	LR	0.875
+1	FLD	0.875
+6	KNN	1.0
+6	LR	1.0
+6	FLD	1.0
